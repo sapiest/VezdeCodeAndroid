@@ -1,8 +1,9 @@
 package com.vezdecode.viewmodels
 
 import androidx.lifecycle.*
-import com.vezdecode.api.base.BaseViewModel
-import com.vezdecode.api.base.Resource
+import com.vezdecode.base.BaseViewModel
+import com.vezdecode.base.Resource
+import com.vezdecode.data.remote.model.DescriptionModel
 import com.vezdecode.data.remote.model.IncidentModel
 import com.vezdecode.data.remote.repository.IncidentsRepository
 import com.vezdecode.utils.Event

@@ -2,8 +2,8 @@ package com.vezdecode.data.remote.repository
 import androidx.lifecycle.liveData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.vezdecode.api.base.BaseDataSource
-import com.vezdecode.api.base.Resource
+import com.vezdecode.base.BaseDataSource
+import com.vezdecode.base.Resource
 import com.vezdecode.data.remote.model.IncidentModel
 import com.vezdecode.utils.Constants
 import kotlinx.coroutines.delay

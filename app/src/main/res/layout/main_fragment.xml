@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.vezdecode.viewmodels.IncidentsViewModel" />
@@ -15,8 +16,8 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:fitsSystemWindows="true"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -34,18 +35,32 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.recyclerview.widget.RecyclerView
+                android:paddingTop="5dp"
                 android:id="@+id/rv_incidents"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:itemCount="2"
                 tools:listitem="@layout/incident_item_list" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:visibility="gone"
+                android:id="@+id/rv_search_results"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:itemCount="2"
+                tools:listitem="@layout/search_item_list" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
+            visibilityBasedOn="@{viewModel.incidents.loading}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            visibilityBasedOn="@{viewModel.incidents.loading}"
-            android:background="@color/white">
+            android:background="@color/white"
+            android:visibility="gone">
 
             <ProgressBar
                 android:layout_width="match_parent"

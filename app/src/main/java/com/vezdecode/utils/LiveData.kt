@@ -2,8 +2,8 @@ package com.vezdecode.utils
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import com.vezdecode.api.base.Resource
-import com.vezdecode.api.base.Status
+import com.vezdecode.base.Resource
+import com.vezdecode.base.Status
 
 fun <T> MediatorLiveData<Resource<T>>.updateData(data: LiveData<Resource<T>>){
     this.addSource(data) { response ->

@@ -1,4 +1,4 @@
-package com.vezdecode.api.base
+package com.vezdecode.base
 
 sealed class Resource<T>(
     val status: Status,

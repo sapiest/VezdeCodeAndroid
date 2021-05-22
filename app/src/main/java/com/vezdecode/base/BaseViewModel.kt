@@ -1,4 +1,4 @@
-package com.vezdecode.api.base
+package com.vezdecode.base
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

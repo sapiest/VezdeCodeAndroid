@@ -2,7 +2,7 @@ package com.vezdecode.viewmodels.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.vezdecode.api.base.BaseDataSource
+import com.vezdecode.base.BaseDataSource
 import com.vezdecode.data.remote.repository.IncidentsRepository
 import com.vezdecode.viewmodels.IncidentsViewModel
 

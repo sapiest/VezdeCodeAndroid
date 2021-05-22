@@ -1,4 +1,4 @@
-package com.vezdecode.api.base
+package com.vezdecode.base
 
 import com.vezdecode.App
 import com.vezdecode.R
@@ -24,7 +24,7 @@ abstract class BaseDataSource {
         return showPrivateData(filename)
     }
 
-    suspend fun showPrivateData(filename: String): String {
+    private suspend fun showPrivateData(filename: String): String {
 
         // GeeksForGeeks represent the folder name to access privately saved data
         val folder = App.applicationContext().getExternalFilesDir(
