@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_navigation"
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.vezdecode.ui.splash.SplashFragment"
+        android:label="@string/splash_fragment"
+        tools:layout="@layout/splash_fragment">
+
+        <action
+            android:id="@+id/action_splashFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment android:id="@+id/mainFragment"
+        android:name="com.vezdecode.ui.main.MainFragment"
+        android:label="@string/fragment_main"
+        tools:layout="@layout/main_fragment">
+<!--        <action-->
+<!--            android:id="@+id/action_mapFragment_to_mapPostDetailFragment"-->
+<!--            app:destination="@id/mapPostDetailsFragment"-->
+<!--            app:popUpTo="@id/mainFragment" />-->
+
+    </fragment>
+
+
+<!--    <fragment-->
+<!--        android:id="@+id/incidentDetails"-->
+<!--        android:name="com.turios.turiosapp.ui.map_details_screen.MapPostDetailsFragment"-->
+<!--        android:label="@string/map_title"-->
+<!--        tools:layout="@layout/fragment_map_post">-->
+<!--        <argument-->
+<!--            android:name="mapPost"-->
+<!--            app:argType="com.turios.turiosapp.data.remote.model.MapPost" />-->
+
+<!--    </fragment>-->
+
+</navigation>
