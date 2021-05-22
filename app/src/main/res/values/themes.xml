@@ -20,14 +20,14 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:background">@color/divider_color</item>
     </style>
-    
+
     <style name="TextView" parent="Widget.AppCompat.TextView">
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
     </style>
-    
+
     <style name="TextView.Bold">
         <item name="android:textStyle">bold</item>
     </style>
@@ -52,9 +52,17 @@
         <item name="android:textColor">@color/black90</item>
     </style>
 
-    <style  name="TextView.CAPS.Description">
+    <style name="TextView.CAPS.Description">
         <item name="android:lineSpacingExtra">5dp</item>
     </style>
 
-    
+    <style name="TextView.CAPS.Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextView.CAPS.Bold.BlackTitle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
 </resources>

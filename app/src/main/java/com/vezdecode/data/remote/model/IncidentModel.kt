@@ -1,8 +1,11 @@
 package com.vezdecode.data.remote.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.vezdecode.utils.DateUtils
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class IncidentModel(
     @SerializedName("STATUS")
     val status: String? = null,
@@ -26,11 +29,13 @@ data class IncidentModel(
     val norm: Double? = null,
     @SerializedName("LNORM")
     val lnorm: Int? = null
-) {
+): Parcelable {
     val isKnowErrorDate: String?
         get() = _isKnowErrorDate?.let { DateUtils.getDMYFormat(it) }
     val targetFinish: String?
         get() = _targetFinish?.let { DateUtils.getDMYFormat(it) }
     val ticketIdBrackets: String
         get() = "($ticketId)"
+    val descriptionAndTicket: String
+        get() = "$description $ticketIdBrackets"
 }

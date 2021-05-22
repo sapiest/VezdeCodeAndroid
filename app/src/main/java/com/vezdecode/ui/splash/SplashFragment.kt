@@ -12,11 +12,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.vezdecode.R
+import com.vezdecode.ui.main.MainFragment
 import com.vezdecode.utils.Constants
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.*
 import kotlin.coroutines.CoroutineContext
 
@@ -61,7 +59,7 @@ class SplashFragment : Fragment(R.layout.splash_fragment), CoroutineScope {
     }
 
     private fun doWriting() {
-        job = launch {
+        job = launch(Dispatchers.Main) {
             writeOnSDCard(Constants.INCIDENTS_FILENAME)
             findNavController().navigate(R.id.action_splashFragment_to_mainFragment)
         }
@@ -79,9 +77,9 @@ class SplashFragment : Fragment(R.layout.splash_fragment), CoroutineScope {
                 data += "$eachline\n"
                 eachline = bufferedReader.readLine()
             }
-        }catch (e: Exception){
+        } catch (e: Exception) {
 
-        }finally {
+        } finally {
             savePrivately(data, filename)
         }
     }
@@ -89,11 +87,13 @@ class SplashFragment : Fragment(R.layout.splash_fragment), CoroutineScope {
     fun savePrivately(data: String, filename: String) {
 
         // Creating folder with name GeekForGeeks
-        val folder = requireActivity().getExternalFilesDir("GeeksForGeeks")
+        val folder = requireActivity().getExternalFilesDir(getString(R.string.app_name))
 
         // Creating file with name gfg.txt
-        val file = File(folder, "test.json")
-        writeTextData(file, data)
+        val file = File(folder, filename)
+        if (!file.exists()) {
+            writeTextData(file, data)
+        }
     }
 
 
@@ -102,7 +102,7 @@ class SplashFragment : Fragment(R.layout.splash_fragment), CoroutineScope {
         try {
             fileOutputStream = FileOutputStream(file)
             fileOutputStream.write(data.toByteArray())
-            Toast.makeText(requireContext(), "Done" + file.absolutePath, Toast.LENGTH_SHORT).show()
+            //Toast.makeText(requireContext(), "Done" + file.absolutePath, Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {

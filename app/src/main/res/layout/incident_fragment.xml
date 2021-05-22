@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.vezdecode.data.remote.model.IncidentModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_description"
+                    style="@style/TextView.CAPS.Bold.BlackTitle"
+                    android:paddingStart="@dimen/default_padding"
+                    android:paddingEnd="@dimen/default_padding"
+                    android:text="@{item.descriptionAndTicket}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="347fguiahdfuasbidudksdjsjdsidjdsdsdsdsdsd (23231)" />
+
+                <View
+                    android:id="@+id/base_divider"
+                    style="@style/divider"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_description" />
+
+                <TextView
+                    android:id="@+id/tv_title_info"
+                    style="@style/TextView.CAPS.Bold.BlackTitle"
+                    android:layout_marginTop="@dimen/default_padding"
+                    android:paddingStart="@dimen/default_padding"
+                    android:paddingEnd="@dimen/default_padding"
+                    android:text="@string/title_info"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/base_divider" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_padding"
+                    android:layout_marginEnd="@dimen/default_padding"
+                    android:layout_marginBottom="30dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title_info">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <include
+                            android:id="@+id/tv_registrator"
+                            layout="@layout/small_item_info"
+                            app:mytitle="@{@string/title_registrator}"
+                            app:myvalue="@{item.reportedBy}" />
+
+                        <include
+                            android:id="@+id/tv_crit_level"
+                            layout="@layout/small_item_info"
+                            app:mytitle="@{@string/title_crit_level}"
+                            app:myvalue="@{item.criticLevel.toString()}" />
+
+                        <include
+                            android:id="@+id/tv_date_find"
+                            layout="@layout/small_item_info"
+                            app:mytitle="@{@string/title_date_find}"
+                            app:myvalue="@{item.isKnowErrorDate()}" />
+
+                        <include
+                            android:id="@+id/tv_date_final"
+                            layout="@layout/small_item_info"
+                            app:mytitle="@{@string/title_date_final}"
+                            app:myvalue="@{item.targetFinish}" />
+
+                        <include
+                            android:id="@+id/tv_system"
+                            layout="@layout/small_item_info"
+                            app:mytitle="@{@string/title_system}"
+                            app:myvalue="@{item.extSysName}" />
+
+                        <include
+                            android:id="@+id/tv_status"
+                            layout="@layout/small_item_info"
+                            app:mytitle="@{@string/title_status}"
+                            app:myvalue="@{item.status}" />
+
+                        <include
+                            android:id="@+id/tv_deviation"
+                            layout="@layout/small_item_info"
+                            app:mytitle="@{@string/title_dev}"
+                            app:myvalue="@{item.norm.toString()}" />
+
+                        <include
+                            android:id="@+id/tv_length"
+                            layout="@layout/small_item_info"
+                            app:mytitle="@{@string/title_length}"
+                            app:myvalue="@{item.lnorm.toString()}" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </LinearLayout>
+</layout>

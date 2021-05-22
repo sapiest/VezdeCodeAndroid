@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="mytitle"
+            type="String" />
+
+        <variable
+            name="myvalue"
+            type="String" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/TextView.Bold.GrayTitle"
+            android:padding="@dimen/default_padding"
+            android:text="@{mytitle}"
+            app:layout_constraintEnd_toStartOf="@id/tv_info_title"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Регистратор" />
+
+        <TextView
+            android:id="@+id/tv_info_title"
+            style="@style/TextView.Bold.BlackTitle"
+            android:padding="@dimen/default_padding"
+            android:text="@{myvalue}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_title"
+            app:layout_constraintTop_toTopOf="@id/tv_title"
+            tools:text="2361723" />
+
+        <View
+            style="@style/divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_info_title" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

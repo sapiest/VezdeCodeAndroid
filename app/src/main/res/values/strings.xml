@@ -1,10 +1,21 @@
 <resources>
     <string name="app_name">Vezdecode</string>
     <string name="first_date">Дата выявления</string>
-    <string name="last_date">Крайник срок</string>
+    <string name="last_date">Крайний срок</string>
     <string name="tv_status">Статус</string>
     <string name="search_title">Поиск</string>
-    <string name="splash_fragment">splash_fragment</string>
-    <string name="fragment_main">main_fragment</string>
+    <string name="splash_fragment"></string>
+    <string name="fragment_main"></string>
     <string name="incidents_title">Инциденты</string>
+    <string name="title_info">Общая информация</string>
+
+    <string name="title_registrator">Регистратор</string>
+    <string name="title_crit_level">Уровень критичности</string>
+    <string name="title_date_find">Дата выявления</string>
+    <string name="title_date_final">Крайний срок</string>
+    <string name="title_system">Система</string>
+    <string name="title_status">Статус</string>
+    <string name="title_dev">Отклонение</string>
+    <string name="title_length">Протяжённость</string>
+
 </resources>
