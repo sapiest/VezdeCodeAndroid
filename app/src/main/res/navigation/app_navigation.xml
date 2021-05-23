@@ -32,6 +32,11 @@
             app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/mainFragment" />
 
+
+        <action
+            android:id="@+id/action_MainFragmenttoDateDialog"
+            app:destination="@+id/date_sheet" />
+
     </fragment>
 
     <fragment
@@ -44,4 +49,30 @@
             app:argType="com.vezdecode.data.remote.model.IncidentModel" />
 
     </fragment>
+
+    <dialog
+        android:id="@+id/date_sheet"
+        android:name="com.vezdecode.ui.main.bottomsheets.DateBottomSheetFragment"
+        tools:layout="@layout/data_bottom_layout">
+
+<!--        <action-->
+<!--            android:id="@+id/action_apply_filter"-->
+<!--            app:destination="@id/incidentDetails">-->
+<!--            <argument-->
+<!--                android:name="dateStart"-->
+<!--                app:argType="String" />-->
+
+<!--            <argument-->
+<!--                android:name="dateEnd"-->
+<!--                app:argType="String" />-->
+<!--        </action>-->
+
+    </dialog>
+
+    <!--    <dialog-->
+    <!--        android:id="@+id/systems_sheet"-->
+    <!--        android:name="com.vezdecode.ui.main.bottomsheets.SystemBottomSheetFragment"-->
+    <!--        tools:layout="@layout/system_bottom_layout">-->
+
+    <!--    </dialog>-->
 </navigation>

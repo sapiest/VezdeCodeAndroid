@@ -7,4 +7,11 @@ import kotlinx.android.parcel.Parcelize
 data class DescriptionModel(
     val id: Long,
     val description: String
-): Parcelable
+): Parcelable{
+    companion object{
+        fun createFromIncident(incidentModel: IncidentModel) = DescriptionModel(
+            id = incidentModel.ticketId?: 0L,
+            description = incidentModel.description?: ""
+        )
+    }
+}

@@ -16,6 +16,8 @@ class IncidentsViewModel(private val repository: IncidentsRepository) : BaseView
     val incidents: LiveData<Resource<List<IncidentModel>>>
         get() = _incidents
 
+    val selectedCategory: MutableLiveData<List<Boolean>> = MutableLiveData(listOf(false, false))
+
     //Routes
     private val _goToDetailIncidentScreen = MutableLiveData<Event<IncidentModel>>()
     val goToDetailIncidentScreen: LiveData<Event<IncidentModel>>
@@ -29,5 +31,9 @@ class IncidentsViewModel(private val repository: IncidentsRepository) : BaseView
         viewModelScope.launch(Dispatchers.IO) {
             _incidents.updateData(repository.getIncidents())
         }
+    }
+
+    fun selectCategory(newList: List<Boolean>){
+        selectedCategory.value = newList
     }
 }

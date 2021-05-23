@@ -38,9 +38,4 @@ data class IncidentModel(
         get() = "($ticketId)"
     val descriptionAndTicket: String
         get() = "$description $ticketIdBrackets"
-
-    fun toDescriptionModel() = DescriptionModel(
-        id = ticketId?: 0L,
-        description = description?: ""
-    )
 }

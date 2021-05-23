@@ -17,5 +17,13 @@
     <string name="title_status">Статус</string>
     <string name="title_dev">Отклонение</string>
     <string name="title_length">Протяжённость</string>
+    <string name="system_category">система</string>
+    <string name="date_category">Дата выявления</string>
+    <string name="cancel_filters">Отменить фильтры</string>
+    <string name="apply_filters">Применить фильтры</string>
+    <string name="mrm_filter">МРМ</string>
+    <string name="hand_input">Ручной ввод</string>
+    <string name="date_start">Дата начала:</string>
+    <string name="date_end">Дата окончания:</string>
 
 </resources>

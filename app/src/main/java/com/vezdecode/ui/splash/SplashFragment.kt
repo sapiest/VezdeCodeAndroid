@@ -91,9 +91,9 @@ class SplashFragment : Fragment(R.layout.splash_fragment), CoroutineScope {
 
         // Creating file with name gfg.txt
         val file = File(folder, filename)
-        if (!file.exists()) {
+        //if (file.exists()) {
             writeTextData(file, data)
-        }
+        //}
     }
 
 

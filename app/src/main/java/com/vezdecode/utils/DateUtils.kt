@@ -14,4 +14,13 @@ object DateUtils {
         val curDate = format.parse(curString)
         return newFormat.format(curDate!!)
     }
+
+    @SuppressLint("SimpleDateFormat")
+    fun stringDateToLong(value: String?): Long {
+        val newFormat = SimpleDateFormat("dd MMM yyyy")
+        val curDate = if(value != null) {
+            newFormat.parse(value)
+        }else null
+        return curDate?.time ?: 0L
+    }
 }

@@ -2,8 +2,10 @@ package com.vezdecode.ui.main
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -17,17 +19,22 @@ import com.vezdecode.R
 import com.vezdecode.RootActivity
 import com.vezdecode.data.remote.model.DescriptionModel
 import com.vezdecode.data.remote.model.IncidentModel
+import com.vezdecode.data.remote.model.SystemModel
 import com.vezdecode.data.remote.repository.IncidentsRepository
 import com.vezdecode.databinding.MainFragmentBinding
 import com.vezdecode.ui.main.adapter.IncidentsAdapter
 import com.vezdecode.ui.main.adapter.SearchAdapter
+import com.vezdecode.ui.main.bottomsheets.DateBottomSheetFragment
+import com.vezdecode.ui.main.bottomsheets.SystemBottomSheetFragment
+import com.vezdecode.utils.DateUtils
 import com.vezdecode.utils.gone
 import com.vezdecode.utils.visible
 import com.vezdecode.viewmodels.IncidentsViewModel
 import com.vezdecode.viewmodels.factory.ViewModelFactory
 
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), SystemBottomSheetFragment.SystemBottomSheetListener,
+    DateBottomSheetFragment.DateBottomSheetListener {
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -35,6 +42,27 @@ class MainFragment : Fragment() {
         ViewModelFactory(
             IncidentsRepository()
         )
+    }
+
+    private var allIncidents = listOf<IncidentModel>()
+
+    private var selectedSystems = listOf<SystemModel>()
+    private var selectedDates: Pair<Long, Long>? = null
+
+    private fun filteringList(filterBySystem: Boolean, filterByDate: Boolean) {
+        var list = allIncidents
+        if (filterBySystem && selectedSystems.isNotEmpty()) {
+            list =
+                list.filter { item -> selectedSystems.find { it.systemName == item.extSysName && it.isActive } != null }
+        }
+        if (filterByDate) {
+            list = list.filter { item ->
+                DateUtils.stringDateToLong(item.isKnowErrorDate) >= selectedDates?.first!! && DateUtils.stringDateToLong(
+                    item.targetFinish
+                ) <= selectedDates?.second!!
+            }
+        }
+        (binding.rvIncidents.adapter as ListAdapter<IncidentModel, *>).submitList(list)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +83,7 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //setUpAllBottomSheets()
         bindViews()
     }
 
@@ -63,8 +92,8 @@ class MainFragment : Fragment() {
         setObservers()
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
-        binding.rvIncidents.apply {
 
+        binding.rvIncidents.apply {
             // Set Layout manager
             this.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -85,7 +114,51 @@ class MainFragment : Fragment() {
                     }
                 }
             }
-            itemAnimator = null
+            this.itemAnimator = null
+        }
+
+        binding.tvSystemCategory.root.setOnClickListener {
+            val list = ArrayList(allIncidents.map { SystemModel.createFromIncident(it) })
+            Log.e("allSystems", list.toString())
+            Log.e("curSystems", selectedSystems.toString())
+            selectedSystems.forEach { systemModel ->
+                val elem = list.find { it.systemName == systemModel.systemName }
+                elem?.let {
+                    val index = list.indexOf(elem)
+                    list[index] = elem.copy(isActive = systemModel.isActive)
+                }
+            }
+            Log.e("newsList", list.toString())
+            val modalbottomSheetFragment = SystemBottomSheetFragment.newInstance(list, this)
+            modalbottomSheetFragment.show(
+                activity?.supportFragmentManager!!,
+                modalbottomSheetFragment.tag
+            )
+        }
+
+        binding.tvDateCategory.root.setOnClickListener {
+            val modalbottomSheetFragment = DateBottomSheetFragment(this)
+            modalbottomSheetFragment.show(
+                activity?.supportFragmentManager!!,
+                modalbottomSheetFragment.tag
+            )
+        }
+    }
+
+    private fun setOnTextViewSelected(view: TextView, isSelected: Boolean) {
+        if (isSelected) {
+            view.background =
+                ContextCompat.getDrawable(requireContext(), R.drawable.bg_gray_button)
+            view.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+        } else {
+            view.background =
+                ContextCompat.getDrawable(requireContext(), R.drawable.bg_red_button)
+            view.setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    android.R.color.holo_red_dark
+                )
+            )
         }
     }
 
@@ -101,7 +174,9 @@ class MainFragment : Fragment() {
                 viewState.data?.let {
                     (binding.rvIncidents.adapter as ListAdapter<IncidentModel, *>).submitList(it)
                     (binding.rvSearchResults.adapter as ListAdapter<DescriptionModel, *>).submitList(
-                        it.map { it.toDescriptionModel() })
+                        it.map { DescriptionModel.createFromIncident(it) })
+                    allIncidents = it
+                    selectedSystems = it.map { SystemModel.createFromIncident(it) }
                 }
             }
         })
@@ -114,12 +189,33 @@ class MainFragment : Fragment() {
                 )
             }
         })
+
+        viewModel.selectedCategory.observe(viewLifecycleOwner, Observer {
+            val systemCategorySelected = it[SYSTEM_CATEGORY_INDEX]
+            val dateCategorySelected = it[DATE_CATEGORY_INDEX]
+            setOnTextViewSelected(binding.tvDateCategory.root as TextView, dateCategorySelected)
+            setOnTextViewSelected(binding.tvSystemCategory.root as TextView, systemCategorySelected)
+            filteringList(systemCategorySelected, dateCategorySelected)
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_search, menu)
         val item = menu.findItem(R.id.action_search)
         val searchView = item.actionView as SearchView
+        searchView.setOnClickListener {
+            val curIncidents =
+                (binding.rvIncidents.adapter as? ListAdapter<IncidentModel, *>)?.currentList
+            val newList = curIncidents?.map {
+                DescriptionModel.createFromIncident(it)
+            }
+            newList?.let {
+                (binding.rvSearchResults.adapter as? SearchAdapter)?.submitList(
+                    ArrayList(it)
+                )
+            }
+        }
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 searchView.clearFocus()
@@ -188,8 +284,47 @@ class MainFragment : Fragment() {
         }
     }
 
+    override fun onSystemApplyButton(selectedList: List<SystemModel>) {
+        if(selectedList.isEmpty()){
+            onSystemDiscardButton()
+            return
+        }
+        this.selectedSystems = selectedList
+        val list =
+            ArrayList(viewModel.selectedCategory.value).apply { this[SYSTEM_CATEGORY_INDEX] = true }
+        viewModel.selectCategory(list)
+    }
+
+    override fun onDateApplyButton(startDate: String, endDate: String) {
+        this.selectedDates =
+            Pair(DateUtils.stringDateToLong(startDate), DateUtils.stringDateToLong(endDate))
+        val list =
+            ArrayList(viewModel.selectedCategory.value).apply { this[DATE_CATEGORY_INDEX] = true }
+        viewModel.selectCategory(list)
+    }
+
+    override fun onSystemDiscardButton() {
+        this.selectedSystems = allIncidents.map { SystemModel.createFromIncident(it) }
+        val list = ArrayList(viewModel.selectedCategory.value).apply {
+            this[SYSTEM_CATEGORY_INDEX] = false
+        }
+        viewModel.selectCategory(list)
+    }
+
+    override fun onDateDiscardButton() {
+        this.selectedDates = null
+        val list =
+            ArrayList(viewModel.selectedCategory.value).apply { this[DATE_CATEGORY_INDEX] = false }
+        viewModel.selectCategory(list)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    companion object {
+        const val SYSTEM_CATEGORY_INDEX = 0
+        const val DATE_CATEGORY_INDEX = 1
     }
 }
