@@ -63,6 +63,15 @@ class MainFragment : Fragment(), SystemBottomSheetFragment.SystemBottomSheetList
             }
         }
         (binding.rvIncidents.adapter as ListAdapter<IncidentModel, *>).submitList(list)
+        val newSearchlist = list.map {
+            DescriptionModel.createFromIncident(
+                it
+            )
+        }
+        (binding.rvSearchResults.adapter as SearchAdapter).apply {
+            submitList(ArrayList(newSearchlist))
+            saveList(newSearchlist)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -137,7 +146,11 @@ class MainFragment : Fragment(), SystemBottomSheetFragment.SystemBottomSheetList
         }
 
         binding.tvDateCategory.root.setOnClickListener {
-            val modalbottomSheetFragment = DateBottomSheetFragment(this)
+            val modalbottomSheetFragment = DateBottomSheetFragment.newInstance(
+                DateUtils.stringDateFromLong(selectedDates?.first),
+                DateUtils.stringDateFromLong(selectedDates?.second),
+                this
+            )
             modalbottomSheetFragment.show(
                 activity?.supportFragmentManager!!,
                 modalbottomSheetFragment.tag
@@ -173,8 +186,12 @@ class MainFragment : Fragment(), SystemBottomSheetFragment.SystemBottomSheetList
             if (!viewState.isLoading()) {
                 viewState.data?.let {
                     (binding.rvIncidents.adapter as ListAdapter<IncidentModel, *>).submitList(it)
-                    (binding.rvSearchResults.adapter as ListAdapter<DescriptionModel, *>).submitList(
-                        it.map { DescriptionModel.createFromIncident(it) })
+                    val newSearchList = it.map { DescriptionModel.createFromIncident(it) }
+                    (binding.rvSearchResults.adapter as SearchAdapter).apply {
+                        submitList(ArrayList(newSearchList))
+                        saveList(newSearchList)
+                    }
+
                     allIncidents = it
                     selectedSystems = it.map { SystemModel.createFromIncident(it) }
                 }
@@ -203,18 +220,6 @@ class MainFragment : Fragment(), SystemBottomSheetFragment.SystemBottomSheetList
         inflater.inflate(R.menu.menu_search, menu)
         val item = menu.findItem(R.id.action_search)
         val searchView = item.actionView as SearchView
-        searchView.setOnClickListener {
-            val curIncidents =
-                (binding.rvIncidents.adapter as? ListAdapter<IncidentModel, *>)?.currentList
-            val newList = curIncidents?.map {
-                DescriptionModel.createFromIncident(it)
-            }
-            newList?.let {
-                (binding.rvSearchResults.adapter as? SearchAdapter)?.submitList(
-                    ArrayList(it)
-                )
-            }
-        }
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -285,7 +290,7 @@ class MainFragment : Fragment(), SystemBottomSheetFragment.SystemBottomSheetList
     }
 
     override fun onSystemApplyButton(selectedList: List<SystemModel>) {
-        if(selectedList.isEmpty()){
+        if (selectedList.isEmpty()) {
             onSystemDiscardButton()
             return
         }

@@ -19,12 +19,8 @@ class SearchAdapter(
     private var queryText: String? = null
     private var fullData: List<DescriptionModel>? = null
 
-    override fun submitList(list: MutableList<DescriptionModel>?) {
-        super.submitList(list)
-
-        if(fullData == null) {
-            fullData = list
-        }
+    fun saveList(list: List<DescriptionModel>) {
+        fullData = list
     }
 
     override fun getFilter(): Filter {
@@ -51,24 +47,28 @@ class SearchAdapter(
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
             Log.e("res", results?.count.toString())
 
-            if(results == null){
+            if (results == null) {
                 submitList(ArrayList(fullData))
-            }else{
+            } else {
                 val data = results.values as ArrayList<DescriptionModel>
-                if(queryText != null) {
+                if (queryText != null) {
                     val newData = data.map {
                         val startInd = it.description.lowercase().indexOf(queryText!!)
                         val endInt = startInd + queryText!!.length
-                        if(startInd != -1){
+                        if (startInd != -1) {
                             val oldValue = it.description.substring(startInd, endInt)
-                            val desc= it.description.replaceRange(startInd, endInt, "<span style=\"background-color: #FFFF00\">$oldValue</span>")
+                            val desc = it.description.replaceRange(
+                                startInd,
+                                endInt,
+                                "<span style=\"background-color: #FFFF00\">$oldValue</span>"
+                            )
                             it.copy(description = desc)
-                        }else{
+                        } else {
                             it
                         }
                     }
                     submitList(ArrayList(newData))
-                }else {
+                } else {
                     submitList(data)
                 }
             }

@@ -25,5 +25,6 @@
     <string name="hand_input">Ручной ввод</string>
     <string name="date_start">Дата начала:</string>
     <string name="date_end">Дата окончания:</string>
+    <string name="choose_date">Выберите дату</string>
 
 </resources>
